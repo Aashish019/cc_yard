@@ -6,6 +6,6 @@ class NavigationController extends GetxController {
   final Rx<int> selectedIndex = 0.obs;
   final List pages = [
     CreatePoll(),
-    const AllPoles(),
+    AllPoles(),
   ];
 }

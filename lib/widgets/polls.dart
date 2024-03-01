@@ -46,6 +46,7 @@ class MyRadio extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Container(
+        padding: const EdgeInsets.only(top: 15),
         width: 90,
         decoration: BoxDecoration(
             border: GradientBoxBorder(
@@ -61,7 +62,10 @@ class MyRadio extends StatelessWidget {
             borderRadius: BorderRadius.circular(16)),
         child: Column(
           children: [
-            Text(htext),
+            Text(
+              htext,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
             const Text("Poll"),
             Obx(() => Radio(
                   activeColor: Theme.of(context).colorScheme.primary,

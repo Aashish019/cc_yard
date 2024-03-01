@@ -1,10 +1,13 @@
+import 'package:cc_yard_test/controller/allpollcontroller.dart';
 import 'package:cc_yard_test/widgets/commentshare.dart';
 import 'package:cc_yard_test/widgets/polldetail.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 
 class AllPoles extends StatelessWidget {
-  const AllPoles({super.key});
+  final allpollsController = Get.put(AllPollsController());
+  AllPoles({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,14 +41,14 @@ class AllPoles extends StatelessWidget {
         height: double.infinity,
         child: ListView.builder(
           physics: const BouncingScrollPhysics(),
-          itemCount: 3,
-          itemBuilder: (context, index) => pollFeed(context),
+          itemCount: allpollsController.getAllPollsList.length,
+          itemBuilder: (context, index) => pollFeed(context, index),
         ),
       ),
     );
   }
 
-  Widget pollFeed(BuildContext context) {
+  Widget pollFeed(BuildContext context, index) {
     return Padding(
       padding: const EdgeInsets.only(top: 7.5, bottom: 7.5),
       child: Container(
@@ -62,28 +65,32 @@ class AllPoles extends StatelessWidget {
               width: 1,
             ),
             borderRadius: BorderRadius.circular(16)),
-        child: pollText(context),
+        child: pollText(context, index),
       ),
     );
   }
 
-  Widget pollText(BuildContext context) {
+  Widget pollText(BuildContext context, index) {
     return Column(
       children: [
-        const Text(
-          "Rohit Sharma Speaks Out on Mumbai Pollution Amidst ODI Worlds",
-          style: TextStyle(
-            fontSize: 19,
-            fontWeight: FontWeight.w400,
-          ),
+        Text(
+          allpollsController.getAllPollsList[index].topic.toString(),
           textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(
           height: 10,
         ),
-        const Text(
-          "US Intel Aids Canada in Nijjar Case",
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+        Text(
+          allpollsController.getAllPollsList[index].question.toString(),
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w300,
+          ),
         ),
         const SizedBox(
           height: 10,
@@ -101,8 +108,24 @@ class AllPoles extends StatelessWidget {
             const SizedBox(
               width: 5,
             ),
-            const Text("@ TOI  |",
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+            RichText(
+              text: TextSpan(children: [
+                const TextSpan(
+                  text: "@",
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                ),
+                TextSpan(
+                  text: allpollsController.getAllPollsList[index].newsNickName
+                      .toString(),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600, fontSize: 14),
+                ),
+                const TextSpan(
+                  text: " |",
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                ),
+              ]),
+            ),
             const SizedBox(
               width: 5,
             ),
@@ -115,23 +138,59 @@ class AllPoles extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
-        const PollDetail(),
-        const PollDetail(),
-        const PollDetail(),
-        const PollDetail(),
+        Container(
+          height: 300,
+          decoration: const BoxDecoration(color: Colors.transparent),
+          child: Column(
+            children: [
+              PollDetails(
+                title: allpollsController.getAllPollsList[index].textOptions!.s1
+                    .toString(),
+                option: allpollsController
+                    .getAllPollsList[index].textOptions!.s1
+                    .toString(),
+                per: "35",
+              ),
+              PollDetails(
+                title: allpollsController.getAllPollsList[index].textOptions!.s2
+                    .toString(),
+                option: allpollsController
+                    .getAllPollsList[index].textOptions!.s2
+                    .toString(),
+                per: "45",
+              ),
+              PollDetails(
+                title: allpollsController.getAllPollsList[index].textOptions!.s3
+                    .toString(),
+                option: allpollsController
+                    .getAllPollsList[index].textOptions!.s3
+                    .toString(),
+                per: "75",
+              ),
+              PollDetails(
+                title: allpollsController.getAllPollsList[index].textOptions!.s4
+                    .toString(),
+                option: allpollsController
+                    .getAllPollsList[index].textOptions!.s4
+                    .toString(),
+                per: "25",
+              ),
+            ],
+          ),
+        ),
         const CommentShare(),
         Divider(
           color: Theme.of(context).colorScheme.primary,
           height: 0.5,
         ),
-        const ListTile(
-          leading: CircleAvatar(
+        ListTile(
+          leading: const CircleAvatar(
             backgroundColor: Colors.white,
             child: Icon(Icons.person),
           ),
           title: Text(
-            "Times of India (TOI)",
-            style: TextStyle(
+            allpollsController.getAllPollsList[index].newsName.toString(),
+            style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
             ),
@@ -139,17 +198,32 @@ class AllPoles extends StatelessWidget {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Us intel ... comments...",
-                style: TextStyle(color: Color.fromRGBO(255, 255, 255, .5)),
-              ),
+              RichText(
+                  text: TextSpan(children: [
+                TextSpan(
+                    text: allpollsController.getAllPollsList[index].newsSubtext
+                        .toString(),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Color.fromRGBO(255, 255, 255, .5),
+                    )),
+              ])),
               Row(
                 children: [
-                  Icon(Icons.favorite_border_rounded),
-                  SizedBox(
+                  const Icon(Icons.favorite_border_rounded),
+                  const SizedBox(
                     width: 5,
                   ),
-                  Text("2.1K")
+                  RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: allpollsController
+                            .getAllPollsList[index].noOfLikes
+                            .toString(),
+                      ),
+                      const TextSpan(text: "k")
+                    ]),
+                  )
                 ],
               )
             ],
